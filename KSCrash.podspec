@@ -22,6 +22,11 @@ Pod::Spec.new do |s|
     subs.source_files = "Sources/#{module_name}/**/*.{h,m,mm,c,cpp,def}"
     subs.public_header_files = "Sources/#{module_name}/include/*.h"
     subs.resource_bundles = { module_name => "Sources/#{module_name}/Resources/PrivacyInfo.xcprivacy" }
+
+
+   s.pod_target_xcconfig = {
+    'CLANG_CXX_LANGUAGE_STANDARD' => 'c++17',
+  } 
   end
 
   s.subspec 'Recording' do |recording|
