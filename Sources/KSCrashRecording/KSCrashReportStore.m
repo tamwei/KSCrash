@@ -195,4 +195,22 @@
     return reports;
 }
 
+- (KSCrashReportDictionary *)mapCrashReportWithID:(int64_t)reportID
+{
+    char path[KSCRS_MAX_PATH_LENGTH];
+    getCrashReportPathByID(reportID, path, &_cConfig);
+    NSString *ph = [NSString stringWithCString:path encoding:kCFStringEncodingUTF8];
+    NSData *jsonData = [NSData dataWithContentsOfFile:ph options: NSDataReadingMappedIfSafe error: nil];
+    if (jsonData) {
+        NSError *error = nil;
+        NSMutableDictionary *crashReport = [KSJSONCodec decode:jsonData
+                                              options:KSJSONDecodeOptionIgnoreNullInArray | KSJSONDecodeOptionIgnoreNullInObject |
+                                                      KSJSONDecodeOptionKeepPartialObject
+                                                error:&error];
+        
+        return [KSCrashReportDictionary reportWithValue:crashReport];
+    }
+    return nil;
+}
+
 @end

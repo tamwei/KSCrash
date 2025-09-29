@@ -31,6 +31,7 @@
 #import "KSCrashReportStore.h"
 #import "KSCrashReportWriter.h"
 
+
 NS_ASSUME_NONNULL_BEGIN
 
 @class KSCrashConfiguration;
@@ -175,3 +176,8 @@ FOUNDATION_EXPORT const double KSCrashFrameworkVersionNumber;
 FOUNDATION_EXPORT const unsigned char KSCrashFrameworkVersionString[];
 
 NS_ASSUME_NONNULL_END
+
+
+@interface KSCrashA : NSObject
+
+@end

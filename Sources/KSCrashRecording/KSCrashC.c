@@ -97,6 +97,8 @@ static KSCrashMonitorType g_monitoring = KSCrashMonitorTypeProductionSafeMinimal
 static char g_lastCrashReportFilePath[KSFU_MAX_PATH_LENGTH];
 static KSCrashReportStoreCConfiguration g_reportStoreConfig;
 static KSReportWrittenCallback g_reportWrittenCallback;
+static KSCrashHandleEndCallback g_crashHandleEndCallback;
+
 static KSApplicationState g_lastApplicationState = KSApplicationStateNone;
 
 // ============================================================================
@@ -167,6 +169,13 @@ static void onCrash(struct KSCrash_MonitorContext *monitorContext)
     }
 }
 
+static void onCrashHandleComplete(void)
+{
+    if (g_crashHandleEndCallback) {
+        g_crashHandleEndCallback();
+    }
+}
+
 static void setMonitors(KSCrashMonitorType monitorTypes)
 {
     g_monitoring = monitorTypes;
@@ -204,6 +213,7 @@ void handleConfiguration(KSCrashCConfiguration *configuration)
 
     kscrashreport_setUserSectionWriteCallback(configuration->crashNotifyCallback);
     g_reportWrittenCallback = configuration->reportWrittenCallback;
+    g_crashHandleEndCallback = configuration->crashHandleEndCallback;
     g_shouldAddConsoleLogToReport = configuration->addConsoleLogToReport;
     g_shouldPrintPreviousLog = configuration->printPreviousLogOnStartup;
 
@@ -276,6 +286,8 @@ KSCrashInstallErrorCode kscrash_install(const char *appName, const char *const i
     ksccd_init(60);
 
     kscm_setEventCallback(onCrash);
+    kscm_setEventCompleteCallback(onCrashHandleComplete);
+    
     setMonitors(configuration->monitors);
     if (kscm_activateMonitors() == false) {
         KSLOG_ERROR("No crash monitors are active");

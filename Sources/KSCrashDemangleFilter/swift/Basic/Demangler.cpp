@@ -593,6 +593,20 @@ NodePointer Demangler::demangleSymbolicReference(unsigned char rawKind,
     return resolved;
 }
 
+NodePointer Demangler::demangleTypeAnnotation() {
+  switch (nextChar()) {
+  case 'a':
+    return createNode(Node::Kind::AsyncAnnotation);
+  case 'b':
+    return createNode(Node::Kind::ConcurrentFunctionType);
+  case 'c':
+    return createWithChild(
+        Node::Kind::GlobalActorFunctionType, popTypeAndGetChild());
+  default:
+    return nullptr;
+  }
+}
+
 NodePointer Demangler::demangleOperator() {
     switch (char c = nextChar()) {
         case '\1':
@@ -640,6 +654,7 @@ NodePointer Demangler::demangleOperator() {
         case 'V': return demangleAnyGenericType(Node::Kind::Structure);
         case 'W': return demangleWitness();
         case 'X': return demangleSpecialType();
+        case 'Y': return demangleTypeAnnotation();
         case 'Z': return createWithChild(Node::Kind::Static, popNode(isEntity));
         case 'a': return demangleAnyGenericType(Node::Kind::TypeAlias);
         case 'c': return popFunctionType(Node::Kind::FunctionType);
@@ -1657,6 +1672,31 @@ NodePointer Demangler::demangleImplFunctionType() {
     }
     if (FAttr)
         type->addChild(createNode(Node::Kind::ImplFunctionAttribute, FAttr), *this);
+    
+//    const char *CoroAttr = nullptr;
+//      if (nextIf('A'))
+//        CoroAttr = "yield_once";
+//      else if (nextIf('I'))
+//        CoroAttr = "yield_once_2";
+//      else if (nextIf('G'))
+//        CoroAttr = "yield_many";
+//      if (CoroAttr)
+//        type->addChild(createNode(Node::Kind::ImplCoroutineKind, CoroAttr), *this);
+
+      if (nextIf('h')) {
+        type->addChild(createNode(Node::Kind::ImplFunctionAttribute, "@Sendable"),
+                       *this);
+      }
+
+      if (nextIf('H')) {
+        type->addChild(createNode(Node::Kind::ImplFunctionAttribute, "@async"),
+                       *this);
+      }
+
+//      if (nextIf('T')) {
+//        type->addChild(createNode(Node::Kind::ImplSendingResult), *this);
+//      }
+
     
     addChild(type, GenSig);
     

@@ -119,6 +119,7 @@ static void handleSignal(int sigNum, siginfo_t *signalInfo, void *userContext)
 
         kscm_handleException(crashContext);
         ksmc_resumeEnvironment(threads, numThreads);
+        kscm_handleExceptionComplete(crashContext);
     } else {
         uninstallSignalHandler();
         ksmemory_notifyUnhandledFatalSignal();

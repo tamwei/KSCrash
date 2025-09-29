@@ -57,6 +57,7 @@
         _doNotIntrospectClasses = nil;
         _crashNotifyCallback = nil;
         _reportWrittenCallback = nil;
+        _crashHandleEndCallback = nil;
         _addConsoleLogToReport = cConfig.addConsoleLogToReport ? YES : NO;
         _printPreviousLogOnStartup = cConfig.printPreviousLogOnStartup ? YES : NO;
         _enableSwapCxaThrow = cConfig.enableSwapCxaThrow ? YES : NO;
@@ -97,9 +98,13 @@
     if (self.crashNotifyCallback) {
         config.crashNotifyCallback = (KSReportWriteCallback)imp_implementationWithBlock(self.crashNotifyCallback);
     }
-    if (config.reportWrittenCallback) {
+    if (self.reportWrittenCallback) {
         config.reportWrittenCallback = (KSReportWrittenCallback)imp_implementationWithBlock(self.reportWrittenCallback);
     }
+    if (self.crashHandleEndCallback) {
+        config.crashHandleEndCallback = (KSCrashHandleEndCallback)imp_implementationWithBlock(self.crashHandleEndCallback);
+    }
+    
     config.addConsoleLogToReport = self.addConsoleLogToReport;
     config.printPreviousLogOnStartup = self.printPreviousLogOnStartup;
     config.enableSwapCxaThrow = self.enableSwapCxaThrow;
@@ -153,6 +158,7 @@
                                       : nil;
     copy.crashNotifyCallback = [self.crashNotifyCallback copy];
     copy.reportWrittenCallback = [self.reportWrittenCallback copy];
+    copy.crashHandleEndCallback = [self.crashHandleEndCallback copy];
     copy.addConsoleLogToReport = self.addConsoleLogToReport;
     copy.printPreviousLogOnStartup = self.printPreviousLogOnStartup;
     copy.enableSwapCxaThrow = self.enableSwapCxaThrow;

@@ -42,6 +42,8 @@ extern "C" {
  * @param reportID The ID of the report that was written.
  */
 typedef void (*KSReportWrittenCallback)(int64_t reportID);
+typedef void (*KSCrashHandleEndCallback)(void);
+
 
 /** Configuration for managing crash reports through the report store API.
  */
@@ -181,6 +183,12 @@ typedef struct {
      * **Default**: NULL
      */
     KSReportWrittenCallback reportWrittenCallback;
+    
+    /** Callback to invoke upon after threads resume.
+     *
+     */
+        
+    KSCrashHandleEndCallback crashHandleEndCallback;
 
     /** If true, append KSLOG console messages to the crash report.
      *
@@ -234,6 +242,7 @@ static inline KSCrashCConfiguration KSCrashCConfiguration_Default(void)
         .doNotIntrospectClasses = { .strings = NULL, .length = 0 },
         .crashNotifyCallback = NULL,
         .reportWrittenCallback = NULL,
+        .crashHandleEndCallback = NULL,
         .addConsoleLogToReport = false,
         .printPreviousLogOnStartup = false,
         .enableSwapCxaThrow = true,

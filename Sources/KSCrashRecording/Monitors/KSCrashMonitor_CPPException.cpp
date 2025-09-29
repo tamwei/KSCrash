@@ -131,6 +131,7 @@ static void CPPExceptionTerminate(void)
 
         KSLOG_DEBUG("Discovering what kind of exception was thrown.");
         g_captureNextStackTrace = false;
+        kssc_initSelfThread(&g_stackCursor, 2);
         try {
             throw;
         } catch (std::exception &exc) {
@@ -171,11 +172,14 @@ static void CPPExceptionTerminate(void)
         crashContext->offendingMachineContext = machineContext;
 
         kscm_handleException(crashContext);
+        
+        ksmc_resumeEnvironment(threads, numThreads);
+        kscm_handleExceptionComplete(crashContext);
     } else {
+        ksmc_resumeEnvironment(threads, numThreads);
         KSLOG_DEBUG("Detected NSException. Letting the current NSException handler deal with it.");
     }
-    ksmc_resumeEnvironment(threads, numThreads);
-
+   
     KSLOG_DEBUG("Calling original terminate handler.");
     g_originalTerminateHandler();
 }

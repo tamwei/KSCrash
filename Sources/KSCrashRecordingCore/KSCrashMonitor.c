@@ -68,6 +68,8 @@ static bool g_crashedDuringExceptionHandling = false;
 static bool g_requiresAsyncSafety = false;
 
 static void (*g_onExceptionEvent)(struct KSCrash_MonitorContext *monitorContext);
+static void (*g_exceptionCompleteEvent)(void);
+
 
 static void initializeMonitorList(MonitorList *list)
 {
@@ -138,10 +140,14 @@ void kscm_resetState(void)
 // ============================================================================
 #pragma mark - API -
 // ============================================================================
-
 void kscm_setEventCallback(void (*onEvent)(struct KSCrash_MonitorContext *monitorContext))
 {
     g_onExceptionEvent = onEvent;
+}
+
+void kscm_setEventCompleteCallback(void (*onEvent)(void))
+{
+    g_exceptionCompleteEvent = onEvent;
 }
 
 bool kscm_activateMonitors(void)
@@ -313,4 +319,10 @@ void kscm_handleException(struct KSCrash_MonitorContext *context)
 
     // Done handling the crash
     context->handlingCrash = false;
+}
+
+void kscm_handleExceptionComplete(struct KSCrash_MonitorContext *context) {
+    if(g_exceptionCompleteEvent) {
+        g_exceptionCompleteEvent();
+    }
 }

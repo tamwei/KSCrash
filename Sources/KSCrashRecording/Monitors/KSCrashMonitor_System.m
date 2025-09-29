@@ -126,8 +126,8 @@ static const char *stringSysctl(const char *name)
 
 static const char *dateString(time_t date)
 {
-    char *buffer = malloc(21);
-    ksdate_utcStringFromTimestamp(date, buffer);
+    char *buffer = malloc(28);
+    ksdate_utcStringFromMicroseconds(date, buffer);
     return buffer;
 }
 
@@ -465,7 +465,7 @@ static void initialize(void)
         g_systemData.kernelVersion = stringSysctl("kern.version");
         g_systemData.osVersion = stringSysctl("kern.osversion");
         g_systemData.isJailbroken = isJailbroken();
-        g_systemData.appStartTime = dateString(time(NULL));
+        g_systemData.appStartTime = dateString(ksdate_microseconds());
         g_systemData.executablePath = cString(getExecutablePath());
         g_systemData.executableName = cString(infoDict[@"CFBundleExecutable"]);
         g_systemData.bundleID = cString(infoDict[@"CFBundleIdentifier"]);

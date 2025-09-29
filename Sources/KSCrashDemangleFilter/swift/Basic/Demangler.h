@@ -494,7 +494,7 @@ namespace swift {
             NodePointer demangleTypeMangling();
             NodePointer demangleSymbolicReference(unsigned char rawKind,
                                                   const void *at);
-            
+            NodePointer demangleTypeAnnotation();
             void dump();
             
         public:

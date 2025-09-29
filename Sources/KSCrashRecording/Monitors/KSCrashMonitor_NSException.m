@@ -135,13 +135,15 @@ static KS_NOINLINE void handleException(NSException *exception, BOOL isUserRepor
         kscm_handleException(crashContext);
 
         free(callstack);
-        if (logAllThreads && isUserReported) {
-            ksmc_resumeEnvironment(threads, numThreads);
-        }
+//        if (logAllThreads && isUserReported) {
+//            ksmc_resumeEnvironment(threads, numThreads);
+//        }
         if (isUserReported == NO && g_previousUncaughtExceptionHandler != NULL) {
             KSLOG_DEBUG(@"Calling original exception handler.");
             g_previousUncaughtExceptionHandler(exception);
         }
+        ksmc_resumeEnvironment(threads, numThreads);
+        kscm_handleExceptionComplete(crashContext);
     }
     KS_THWART_TAIL_CALL_OPTIMISATION
 }

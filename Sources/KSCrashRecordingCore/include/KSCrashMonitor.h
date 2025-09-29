@@ -108,6 +108,8 @@ void kscm_removeMonitor(const KSCrashMonitorAPI *api);
  */
 void kscm_setEventCallback(void (*onEvent)(struct KSCrash_MonitorContext *monitorContext));
 
+void kscm_setEventCompleteCallback(void (*onEvent)(void));
+
 // Uncomment and implement if needed.
 /**
  * Retrieves active crash monitors.
@@ -132,6 +134,9 @@ bool kscm_notifyFatalExceptionCaptured(bool isAsyncSafeEnvironment);
  * @param context Contextual information about the exception.
  */
 void kscm_handleException(struct KSCrash_MonitorContext *context);
+
+void kscm_handleExceptionComplete(struct KSCrash_MonitorContext *context);
+
 
 #ifdef __cplusplus
 }

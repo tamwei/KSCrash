@@ -130,6 +130,10 @@ NS_SWIFT_NAME(CrashReportStore)
  */
 - (void)deleteReportWithID:(int64_t)reportID NS_SWIFT_NAME(deleteReport(with:));
 
+
+/* Load the (memory mapped) data */
+- (KSCrashReportDictionary *)mapCrashReportWithID:(int64_t)reportID;
+
 @end
 
 NS_ASSUME_NONNULL_END

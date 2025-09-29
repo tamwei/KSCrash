@@ -123,7 +123,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * **Default**: NULL
  */
-@property(nonatomic, copy, nullable) void (^reportWrittenCallback)(int64_t reportID);
+@property(nonatomic, copy, nullable) void (^reportWrittenCallback)(void);
 
 /** If true, append KSLOG console messages to the crash report.
  *
@@ -131,6 +131,17 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * **Default**: false
  */
+
+@property(nonatomic, copy, nullable) void (^crashHandleEndCallback)(void);
+
+
+/** If true, append KSLOG console messages to the crash report.
+ *
+ * When enabled, KSLOG console messages will be included in the crash report.
+ *
+ * **Default**: false
+ */
+
 @property(nonatomic, assign) BOOL addConsoleLogToReport;
 
 /** If true, print the previous log to the console on startup.

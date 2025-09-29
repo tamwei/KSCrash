@@ -112,6 +112,9 @@ void kscrs_deleteAllReports(const KSCrashReportStoreCConfiguration *const config
  */
 void kscrs_deleteReportWithID(int64_t reportID, const KSCrashReportStoreCConfiguration *const configuration);
 
+void getCrashReportPathByID(int64_t id, char *pathBuffer, const KSCrashReportStoreCConfiguration *const config);
+
+
 #ifdef __cplusplus
 }
 #endif
