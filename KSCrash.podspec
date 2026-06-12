@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
   s.license      = { :type => 'KSCrash license agreement', :file => 'LICENSE' }
   s.author       = { "Karl Stenerud" => "kstenerud@gmail.com" }
   s.ios.deployment_target = IOS_DEPLOYMENT_TARGET
-  s.osx.deployment_target = '10.14'
+  s.osx.deployment_target = '11.0'
   s.tvos.deployment_target = '12.0'
   s.watchos.deployment_target = '5.0'
   s.visionos.deployment_target =  '1.0'
